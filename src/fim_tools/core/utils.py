@@ -1,13 +1,14 @@
 """A file to contain utils for reading/writing files"""
 
 from pathlib import Path
+from typing import Any
 
 import geopandas as gpd
 import pandas as pd
 from pyogrio.errors import DataLayerError
 
 
-def _export(layers: dict[str, gpd.GeoDataFrame], output_path: Path) -> None:
+def _export(layers: dict[str, Any], output_path: Path) -> None:
     """Exports a dictionary of layers to a file
 
     Parameters
@@ -17,7 +18,7 @@ def _export(layers: dict[str, gpd.GeoDataFrame], output_path: Path) -> None:
     output_path : Path | str
         The file path to export the GPKG to
     """
-    for layer_name, df in enumerate(layers.items()):
+    for layer_name, df in layers.items():
         if isinstance(df, gpd.GeoDataFrame):
             # Spatial layer
             df.to_file(
@@ -31,7 +32,7 @@ def _export(layers: dict[str, gpd.GeoDataFrame], output_path: Path) -> None:
             gdf = gpd.GeoDataFrame(
                 df,
                 geometry=[None] * len(df)
-            )
+            )  # type: ignore
             gdf.to_file(
                 output_path,
                 layer=layer_name,

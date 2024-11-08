@@ -13,7 +13,7 @@ __all__ = [
 
 def get_upstream(
     file_path: Path | str, output_path: Path | str, source: str, flowpath_attr_cols: list[str] | None = None
-) -> gpd.GeoDataFrame:
+) -> None:
     """Gets upstream divides, nexus, flowpaths, and attributes from a source nexus
 
     Parameters
@@ -61,13 +61,10 @@ def get_upstream(
     subset_flowpath_attributes = flowpath_attributes[flowpaths_attributes_mask]
     subset_network = network[network_mask]
 
-    _export(
-        layers={
-            "divides": subset_divides,
-            "nexus": subset_nexus,
-            "flowpaths": subset_flowpaths,
-            "flowpath-attributes": subset_flowpath_attributes.drop_duplicates(),
-            "network": subset_network,
-        },
-        output_path=output_path,
-    )
+    _export(layers={
+        "divides": subset_divides,
+        "nexus": subset_nexus,
+        "flowpaths": subset_flowpaths,
+        "flowpath-attributes": subset_flowpath_attributes.drop_duplicates(),
+        "network": subset_network,
+    }, output_path=output_path)
